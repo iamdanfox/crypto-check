@@ -29,10 +29,10 @@ public class CryptoCheckPluginIntegrationTest {
 
     @Test
     public void example_test_running() {
-        BuildResult result = gradlew().withArguments("cryptocheckTask", "i")
+        BuildResult result = gradlew().withArguments("cryptocheck", "i")
                 .forwardOutput()
                 .build();
-        assertThat(result.task(":cryptocheckTask").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+        assertThat(result.task(":cryptocheck").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
     }
 
 

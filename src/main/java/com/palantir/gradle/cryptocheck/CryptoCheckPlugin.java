@@ -11,7 +11,7 @@ public class CryptoCheckPlugin implements Plugin<Project> {
 
     @Override
     public void apply(Project project) {
-        project.getTasks().create("cryptocheckTask", CryptoCheckTask.class);
+        project.getTasks().create("cryptocheck", CryptoCheckTask.class);
 
         // TODO(dfox): add a description and group to ensure task appears in ./gradlew tasks
         // TODO(dfox): make task appear as a dependency of ./gradlew test
