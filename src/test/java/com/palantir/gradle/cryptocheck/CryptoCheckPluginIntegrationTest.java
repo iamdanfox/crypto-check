@@ -14,6 +14,7 @@ import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -28,13 +29,24 @@ public class CryptoCheckPluginIntegrationTest {
     }
 
     @Test
-    public void example_test_running() {
+    public void gradlew_cryptocheck_works() {
         BuildResult result = gradlew().withArguments("cryptocheck", "i")
                 .forwardOutput()
                 .build();
         assertThat(result.task(":cryptocheck").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
     }
 
+    @Ignore
+    @Test
+    public void when_you_run_gradlew_test_it_runs_crypto_check() throws Exception {
+        buildFile("apply plugin: 'java'");
+
+        BuildResult result = gradlew().withArguments("test", "i")
+//                .forwardOutput()
+                .build();
+
+        assertThat(result.task(":cryptocheck").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
+    }
 
     private GradleRunner gradlew() {
         return GradleRunner.create().withProjectDir(gradleDir.getRoot()).withPluginClasspath();
