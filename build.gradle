@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url  "http://palantir.bintray.com/releases" }
+    }
+
+    dependencies {
+        classpath 'com.netflix.nebula:nebula-dependency-recommender:4.5.0'
+        classpath 'com.palantir.baseline:gradle-baseline-java:0.16.0' // keep in sync with versions.props
+    }
+}
+
+plugins {
+    id 'com.palantir.git-version' version '0.7.3'
+    id 'com.palantir.configuration-resolver' version '0.2.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'com.palantir.baseline'
+apply plugin: 'com.palantir.configuration-resolver'
+apply plugin: 'nebula.dependency-recommender'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'java-gradle-plugin'
+
+group 'com.palantir.cryptocheck'
+version gitVersion()
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+
+    testCompile gradleTestKit()
+    testCompile 'junit:junit'
+    testCompile 'org.assertj:assertj-core'
+    testCompile 'com.google.guava:guava'
+
+    baseline 'com.palantir.baseline:gradle-baseline-java-config@zip'
+}
+
+dependencyRecommendations {
+    strategy OverrideTransitives
+    propertiesFile file: project.rootProject.file('versions.props')
+}
+
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+    }
+}
+
+configurations.errorprone {
+    resolutionStrategy {
+        force 'com.google.guava:guava:21.0'
+    }
+}
+
+gradlePlugin {
+    // do not add new task to publish to plugins.gradle.org
+    automatedPublishing = false
+}

@@ -1,0 +1,4 @@
+com.google.guava:* = 21.0
+com.palantir.baseline:gradle-baseline-java-config = 0.16.0
+junit:junit = 4.12
+org.assertj:assertj-core = 3.5.2
