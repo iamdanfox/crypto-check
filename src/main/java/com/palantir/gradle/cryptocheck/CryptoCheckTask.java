@@ -15,7 +15,7 @@ public class CryptoCheckTask extends DefaultTask {
 
     @TaskAction
     public void checkCrypto() throws NoSuchAlgorithmException, IOException {
-        if (javax.crypto.Cipher.getMaxAllowedKeyLength("AES") == Integer.MAX_VALUE) {
+        if (javax.crypto.Cipher.getMaxAllowedKeyLength("AES") != Integer.MAX_VALUE) {
             File file = new File("src/main/resources/unlimited-strength-crypto-error-message.txt");
             System.out.println(new String(Files.readAllBytes(file.toPath())));
         }
