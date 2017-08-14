@@ -63,3 +63,7 @@ gradlePlugin {
     // do not add new task to publish to plugins.gradle.org
     automatedPublishing = false
 }
+
+if (System.env.CIRCLE_TEST_REPORTS) {
+    test.reports.junitXml.destination = new File(System.env.CIRCLE_TEST_REPORTS, project.getName())
+}
