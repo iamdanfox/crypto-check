@@ -1,0 +1,18 @@
+Your machine does not have unlimited strength crypto installed, so some Magritte functionality won't work.
+
+To resolve this:
+1. Go to http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
+2. Accept and download jce_policy-8.zip
+3. Unzip
+4. Copy `local_policy.jar` and `US_export_policy.jar` into your `$JAVA_HOME/jre/lib/security` (replacing the existing files).
+5. Be sure to stop the gradle daemon after replacing the jars otherwise it won't pick up the changes.
+   You can do this with `./gradlew --stop`. You should then be able to run the command you were trying to run before.
+6. Should (5) fail, you can try running `jps` to get a list of running Java processes. e.g.
+     19808 Jps
+     19537 GradleWrapperMain
+     15861 GradleDaemon
+   Running `kill -9 <gradle daemon process id>` or in this example `kill -9 15861` will forcibly kill the daemon.
+
+NOTE:
+If you *really* know what you are doing you can disable this check by setting the system property `disable.crypto.check` to true.
+e.g. ./gradlew idea -D disable.crypto.check=true"

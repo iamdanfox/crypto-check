@@ -30,9 +30,11 @@ public class CryptoCheckPluginIntegrationTest {
 
     @Test
     public void gradlew_cryptocheck_works() {
-        BuildResult result = gradlew().withArguments("cryptocheck", "i")
+        BuildResult result = gradlew().withArguments("cryptocheck", "-i")
                 .forwardOutput()
                 .build();
+
+        System.out.println(result.getOutput());
         assertThat(result.task(":cryptocheck").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
     }
 
