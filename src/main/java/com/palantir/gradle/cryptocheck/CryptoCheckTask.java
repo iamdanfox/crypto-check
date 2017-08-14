@@ -4,6 +4,8 @@
 
 package com.palantir.gradle.cryptocheck;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import org.gradle.api.DefaultTask;
@@ -14,24 +16,21 @@ public class CryptoCheckTask extends DefaultTask {
 
     @TaskAction
     public void checkCrypto() throws NoSuchAlgorithmException {
-        // TODO(dfox): print full warning:
-        /*
-Your machine does not have unlimited strength crypto installed, so some unit tests won't run.
+        if (System.getenv("OVERRIDE_KEY_SAFETY_PROTECTIONS") != null) {
+            System.err.println("OVERRIDE_KEY_SAFETY_PROTECTIONS set, skipping crypto check");
+            return;
+        }
 
-To resolve this immediately:
+        if (Cipher.getMaxAllowedKeyLength("AES") == Integer.MAX_VALUE) {
+            return;
+        }
 
-Set the environment variable "OVERRIDE_KEY_SAFETY_PROTECTIONS" to true.
-e.g. $ export OVERRIDE_KEY_SAFETY_PROTECTIONS=true
-     $ ./gradlew build
-
-Or, to resolve this permanently:
-
-1. Go to http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html
-2. Accept and download jce_policy-8.zip
-3. Unzip
-4. Copy `local_policy.jar` and `US_export_policy.jar` into your `$JAVA_HOME/jre/lib/security` (replacing the existing files).
-
-Before running tests, uou may need to run `./gradlew --stop` to kill any daemons.
-         */
+        try (InputStream is = this.getClass().getResource("crypto_warning.txt").openStream()) {
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String warningMessage = s.next();
+            System.err.print(warningMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

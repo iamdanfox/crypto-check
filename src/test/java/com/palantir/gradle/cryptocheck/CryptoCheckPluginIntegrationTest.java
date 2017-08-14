@@ -36,7 +36,14 @@ public class CryptoCheckPluginIntegrationTest {
         assertThat(result.task(":cryptocheck").getOutcome()).isEqualTo(TaskOutcome.SUCCESS);
     }
 
-    @Ignore
+    @Test
+    public void gradlew_cryptocheck_shows_up_in_tasks() {
+        BuildResult result = gradlew().withArguments("tasks", "i")
+                .forwardOutput()
+                .build();
+        assertThat(result.getOutput()).contains("cryptocheck");
+    }
+
     @Test
     public void when_you_run_gradlew_test_it_runs_crypto_check() throws Exception {
         buildFile("apply plugin: 'java'");
