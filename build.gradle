@@ -17,6 +17,7 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url  "http://palantir.bintray.com/releases" }
 }
 
 apply plugin: 'com.palantir.baseline'
